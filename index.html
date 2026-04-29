@@ -6,22 +6,17 @@
 <title>MMT 2026 — Live Scores</title>
 <style>
   :root {
-    --bg: #f9f9f9; --bg2: #f0f0f0; --bg3: #e4e4e4;
-    --text: #111; --text2: #555; --text3: #999;
-    --border: #ddd; --border2: #ccc;
-    --green: #1D9E75; --green-bg: #E1F5EE; --green-dark: #0F6E56;
-    --blue-bg: #E6F1FB; --blue: #185FA5;
-    --amber: #BA7517; --amber-bg: #FAEEDA; --amber-dark: #854F0B;
-    --red: #A32D2D; --radius: 10px; --radius-sm: 6px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --bg:#f9f9f9;--bg2:#f0f0f0;--bg3:#e4e4e4;
+    --text:#111;--text2:#555;--text3:#999;
+    --border:#ddd;--border2:#ccc;
+    --green:#1D9E75;--green-bg:#E1F5EE;--green-dark:#0F6E56;
+    --blue-bg:#E6F1FB;--blue:#185FA5;
+    --amber:#BA7517;--amber-bg:#FAEEDA;--amber-dark:#854F0B;
+    --red:#A32D2D;--radius:10px;--radius-sm:6px;
+    --shadow:0 1px 3px rgba(0,0,0,0.08);
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg:#141414;--bg2:#1e1e1e;--bg3:#2a2a2a;
-      --text:#f0f0f0;--text2:#aaa;--text3:#666;
-      --border:#2e2e2e;--border2:#3a3a3a;
-      --green-bg:#0d2e22;--blue-bg:#0d1e30;--amber-bg:#2e1e05;
-    }
+  @media(prefers-color-scheme:dark){
+    :root{--bg:#141414;--bg2:#1e1e1e;--bg3:#2a2a2a;--text:#f0f0f0;--text2:#aaa;--text3:#666;--border:#2e2e2e;--border2:#3a3a3a;--green-bg:#0d2e22;--blue-bg:#0d1e30;--amber-bg:#2e1e05;}
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
@@ -40,10 +35,10 @@
   .dtab.active{background:var(--text);color:var(--bg);border-color:var(--text)}
   .time-grp{margin-bottom:6px}
   .time-hdr{font-size:11px;font-weight:600;color:var(--text3);padding:6px 0 4px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);margin-bottom:6px}
-  .gcard{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;margin-bottom:7px;cursor:pointer;box-shadow:var(--shadow);transition:border-color .15s,transform .1s}
-  .gcard:hover{border-color:var(--border2);transform:translateY(-1px)}
+  .gcard{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;margin-bottom:7px;cursor:default;box-shadow:var(--shadow);transition:border-color .15s}
+  .gcard.clickable{cursor:pointer}.gcard.clickable:hover{border-color:var(--border2);transform:translateY(-1px)}
   .gcard.live{border-left:3px solid var(--green)}
-  .gcard.done{opacity:.85}
+  .gcard.done{border-left:3px solid var(--text3);background:var(--bg2)}
   .gmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
   .gmeta span{font-size:11px;color:var(--text2)}
   .bdg{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
@@ -53,9 +48,12 @@
   .mu{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .tn{font-size:14px;font-weight:600;color:var(--text);flex:1;line-height:1.3}
   .tn.r{text-align:right}.tn.tbd{color:var(--text3);font-weight:400;font-style:italic}
+  .tn.winner{color:var(--green)}
   .sd{display:flex;gap:8px;align-items:center;min-width:72px;justify-content:center}
   .sn{font-size:22px;font-weight:700;color:var(--text);min-width:26px;text-align:center}
+  .sn.winner{color:var(--green)}
   .dash{font-size:16px;color:var(--text3)}
+  .final-bar{font-size:11px;color:var(--text3);text-align:center;margin-top:6px;font-style:italic}
   .sg{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
   @media(max-width:480px){.sg{grid-template-columns:1fr}}
   .pc{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
@@ -77,16 +75,17 @@
   .panel h3{font-size:13px;font-weight:600;margin-bottom:.85rem}
   .fr{display:flex;gap:10px;align-items:center;margin-bottom:9px;flex-wrap:wrap}
   .fr label{font-size:12px;color:var(--text2);min-width:82px}
-  select,input[type=number],input[type=text]{border:1px solid var(--border2);border-radius:var(--radius-sm);padding:6px 10px;font-size:13px;background:var(--bg);color:var(--text);font-family:inherit;min-width:130px;outline:none}
+  select,input[type=password],input[type=number],input[type=text]{border:1px solid var(--border2);border-radius:var(--radius-sm);padding:6px 10px;font-size:13px;background:var(--bg);color:var(--text);font-family:inherit;min-width:130px;outline:none}
   select:focus,input:focus{border-color:var(--green)}
   input[type=number]{width:72px;min-width:72px;text-align:center}
-  input[type=text]{min-width:150px}
+  input[type=text],input[type=password]{min-width:150px}
   .btn{padding:7px 16px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg);color:var(--text);font-size:13px;cursor:pointer;font-weight:600;font-family:inherit;transition:all .15s}
   .btn:hover{background:var(--bg3)}
   .btn.primary{background:var(--green);border-color:var(--green);color:#fff}
   .btn.primary:hover{background:var(--green-dark)}
   .btn.amber{background:var(--amber);border-color:var(--amber);color:#fff}
   .btn.amber:hover{background:var(--amber-dark)}
+  .btn.danger{background:var(--red);border-color:var(--red);color:#fff}
   .team-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
   @media(max-width:480px){.team-grid{grid-template-columns:1fr}}
   .team-row{display:flex;align-items:center;gap:7px}
@@ -118,13 +117,12 @@
     <h1>🏐 MMT 2026 — Live Scores <span class="sync-dot" id="sync-dot"></span></h1>
     <p>Musleh Mau'ud (ra) Tournament &nbsp;·&nbsp; May 1–3, 2026 &nbsp;·&nbsp; Aiwan Tahir</p>
   </div>
-  <div class="tabs">
+  <div class="tabs" id="tab-bar">
     <button class="tab active" onclick="switchTab('scores')">Scores</button>
     <button class="tab" onclick="switchTab('standings')">Standings</button>
-    <button class="tab" onclick="switchTab('admin')">Admin</button>
+    <!-- Admin tab injected only if ?admin in URL -->
   </div>
-
-  <!-- SCORES -->
+ 
   <div id="tab-scores" class="sec active">
     <div class="day-tabs">
       <button class="dtab active" onclick="setDay(0)">Fri May 1</button>
@@ -134,26 +132,25 @@
     <div id="games-list"><div class="loading">Connecting to live database...</div></div>
     <p class="hint">🔴 Updates instantly for everyone</p>
   </div>
-
-  <!-- STANDINGS -->
+ 
   <div id="tab-standings" class="sec">
     <div class="sg" id="standings-body"></div>
     <p style="font-size:11px;color:var(--text2);margin-top:10px;line-height:1.6">🟢 Top 4 from each pool → Championship &nbsp;|&nbsp; 5th–8th → Division 2</p>
   </div>
-
-  <!-- ADMIN -->
-  <div id="tab-admin" class="sec">
+ 
+  <div id="tab-admin" class="sec" style="display:none">
     <div class="pin-wrap">
       <h3>🔐 Admin Login</h3>
       <div class="pin-row">
-        <input type="number" id="pin-input" placeholder="Enter PIN" style="width:110px;min-width:110px">
+        <input type="password" id="pin-input" placeholder="Enter password" style="width:160px;min-width:160px">
         <button class="btn primary" onclick="checkPin()">Unlock</button>
         <span class="ps" id="pin-status"></span>
       </div>
-      <p style="font-size:11px;color:var(--text3);margin-top:8px">Court 1 Admin: PIN <strong>1111</strong> &nbsp;·&nbsp; Court 2 Admin: PIN <strong>2222</strong></p>
     </div>
     <div id="admin-panel" style="display:none">
       <div id="adm-badge-row"></div>
+ 
+      <!-- Score Entry -->
       <div class="panel">
         <h3>📋 Enter / Update Score</h3>
         <div class="fr"><label>Day</label>
@@ -178,14 +175,17 @@
         <div class="fr"><label id="lbl-b">Team 2</label><input type="number" id="adm-sb" min="0" max="99" value="0"></div>
         <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
           <button class="btn primary" onclick="saveScore()">Save Score</button>
-          <button class="btn" onclick="clearScore()">Clear</button>
+          <button class="btn danger" onclick="clearScore()">Reset to —</button>
         </div>
       </div>
+ 
       <div id="confirm-zone"></div>
+ 
+      <!-- Sunday seeding -->
       <div id="seed-panel" style="display:none">
         <div class="panel">
           <h3>🏆 Sunday Bracket Seeding</h3>
-          <p style="font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.5">Set seeds 1–8 for each pool. Standings pre-fill as a guide. Seeds 1–4 → Championship, 5–8 → Division 2.</p>
+          <p style="font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.5">Set seeds 1–8 for each pool. Seeds 1–4 → Championship, 5–8 → Division 2.</p>
           <div class="seed-grid">
             <div class="sp"><h3>Pool A Seeds</h3><div id="seed-a"></div></div>
             <div class="sp"><h3>Pool B Seeds</h3><div id="seed-b"></div></div>
@@ -193,11 +193,15 @@
           <button class="btn amber" onclick="saveSeeds()">Save Seeds &amp; Update Bracket</button>
         </div>
       </div>
+ 
+      <!-- Team names -->
       <div class="panel">
         <h3>✏️ Edit Team Names</h3>
         <div class="team-grid" id="team-editor"></div>
         <button class="btn primary" onclick="saveTeams()">Save Team Names</button>
       </div>
+ 
+      <!-- Schedule times -->
       <div class="panel">
         <h3>🕐 Edit Schedule Times</h3>
         <div class="fr"><label>Day</label>
@@ -210,17 +214,17 @@
         <div id="sch-editor" style="margin-top:10px"></div>
         <button class="btn primary" style="margin-top:10px" onclick="saveTimes()">Save Times</button>
       </div>
+ 
       <p style="font-size:11px;color:var(--text3);text-align:center">All changes sync instantly to all viewers via Firebase.</p>
     </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
-
-<!-- Firebase SDK -->
+ 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, set, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+ 
 const firebaseConfig = {
   apiKey: "AIzaSyCbjw3k_wNJ7YQNXUg3QD2Lke9ByWDJcho",
   authDomain: "mmt-2026.firebaseapp.com",
@@ -230,23 +234,24 @@ const firebaseConfig = {
   appId: "1:685680113920:web:61ffd78c4950ebeac05be5",
   databaseURL: "https://mmt-2026-default-rtdb.firebaseio.com"
 };
-
+ 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbRef = ref(db, 'mmt2026');
-
-// ── Data ──
-const PINS = { 1111: 1, 2222: 2 };
+ 
+// ── Passwords (hashed for basic obfuscation) ──
+const PASSWORDS = { 'court1pass': 1, 'court2pass': 2 };
+ 
 const DEFAULT_TEAMS = {
   A:'Vaughan',B:'British Columbia',C:'Brampton West',D:'Peace Village',
   E:'Western ON',F:'Prairie',G:'Central West ON',H:'Toronto',
   I:'Calgary',J:'Mississauga',K:'Halton-Niagara',L:'Toronto West',
   M:'Central East ON',N:'Northern ON',O:'Alberta',P:'Brampton East',Q:'Quebec'
 };
-const POOL_A = ['A','B','C','D','E','F','G','H'];
-const POOL_B = ['I','J','K','L','M','N','O','P','Q'];
-
-const DEFAULT_FRI = [
+const POOL_A=['A','B','C','D','E','F','G','H'];
+const POOL_B=['I','J','K','L','M','N','O','P','Q'];
+ 
+const DEFAULT_FRI=[
   {id:'f1',r:1,t:'3:30–4:00pm',c:1,h:'I',a:'Q',pool:'B'},{id:'f2',r:1,t:'3:30–4:00pm',c:2,h:'J',a:'P',pool:'B'},
   {id:'f3',r:2,t:'4:00–4:30pm',c:1,h:'A',a:'H',pool:'A'},{id:'f4',r:2,t:'4:00–4:30pm',c:2,h:'B',a:'G',pool:'A'},
   {id:'f5',r:3,t:'4:30–5:00pm',c:1,h:'L',a:'N',pool:'B'},{id:'f6',r:3,t:'4:30–5:00pm',c:2,h:'K',a:'O',pool:'B'},
@@ -259,7 +264,7 @@ const DEFAULT_FRI = [
   {id:'f19',r:10,t:'7:35–8:00pm',c:1,h:'A',a:'F',pool:'A'},{id:'f20',r:10,t:'7:35–8:00pm',c:2,h:'G',a:'E',pool:'A'},
   {id:'f21',r:11,t:'8:00–8:25pm',c:1,h:'M',a:'J',pool:'B'},{id:'f22',r:11,t:'8:00–8:25pm',c:2,h:'K',a:'L',pool:'B'},
 ];
-const DEFAULT_SAT = [
+const DEFAULT_SAT=[
   {id:'s1',r:12,t:'9:30–9:55am',c:1,h:'J',a:'L',pool:'B'},{id:'s2',r:12,t:'9:30–9:55am',c:2,h:'Q',a:'M',pool:'B'},
   {id:'s3',r:13,t:'9:55–10:20am',c:1,h:'F',a:'D',pool:'A'},{id:'s4',r:13,t:'9:55–10:20am',c:2,h:'A',a:'E',pool:'A'},
   {id:'s5',r:14,t:'10:20–10:45am',c:1,h:'O',a:'M',pool:'B'},{id:'s6',r:14,t:'10:20–10:45am',c:2,h:'I',a:'N',pool:'B'},
@@ -282,7 +287,7 @@ const DEFAULT_SAT = [
   {id:'s39',r:31,t:'6:40–7:05pm',c:1,h:'O',a:'P',pool:'B'},{id:'s40',r:31,t:'6:40–7:05pm',c:2,h:'M',a:'N',pool:'B'},
   {id:'s41',r:32,t:'7:05–7:30pm',c:1,h:'J',a:'K',pool:'B'},{id:'s42',r:32,t:'7:05–7:30pm',c:2,h:'I',a:'L',pool:'B'},
 ];
-const SUN = [
+const SUN=[
   {id:'d2qf1',label:'Div 2 QF 1',t:'9:30am',court:'Court 1',bracket:'div2',hSeed:'A5',aSeed:'B8'},
   {id:'d2qf2',label:'Div 2 QF 2',t:'9:30am',court:'Court 2',bracket:'div2',hSeed:'A6',aSeed:'B7'},
   {id:'d2qf3',label:'Div 2 QF 3',t:'10:00am',court:'Court 1',bracket:'div2',hSeed:'A7',aSeed:'B6'},
@@ -300,108 +305,136 @@ const SUN = [
   {id:'d2final',label:'🥈 Division 2 Finals',t:'3:00pm',court:'Court 1',bracket:'div2',hWin:'d2sf1',aWin:'d2sf2'},
   {id:'chfinal',label:'🏆 Championship Finals',t:'4:10pm',court:'Court 1',bracket:'champ',hWin:'chsf1',aWin:'chsf2'},
 ];
-
-let state = { scores:{}, seeds:{A:{},B:{}}, confirmed:{}, teams:{}, times:{} };
-let currentDay = 0;
-let adminCourt = 0;
-
-// ── Firebase real-time listener ──
-onValue(dbRef, (snapshot) => {
-  const data = snapshot.val();
-  if (data) {
-    state = data;
-    if (!state.seeds) state.seeds = {A:{},B:{}};
-    if (!state.confirmed) state.confirmed = {};
-    if (!state.teams) state.teams = {};
-    if (!state.times) state.times = {};
+ 
+let state={scores:{},seeds:{A:{},B:{}},confirmed:{},teams:{},times:{}};
+let currentDay=0;
+let adminCourt=0;
+const isAdminMode = window.location.search.includes('admin');
+ 
+// Inject Admin tab only if ?admin in URL
+if(isAdminMode){
+  const tabBar=document.getElementById('tab-bar');
+  const adminTab=document.createElement('button');
+  adminTab.className='tab';
+  adminTab.textContent='⚙️ Admin';
+  adminTab.onclick=()=>switchTab('admin');
+  tabBar.appendChild(adminTab);
+  document.getElementById('tab-admin').style.display='';
+}
+ 
+// Firebase listener
+onValue(dbRef,(snapshot)=>{
+  const data=snapshot.val();
+  if(data){
+    state=data;
+    if(!state.seeds)state.seeds={A:{},B:{}};
+    if(!state.confirmed)state.confirmed={};
+    if(!state.teams)state.teams={};
+    if(!state.times)state.times={};
+    // Clear test score for f1 if it exists
+    if(state.scores&&state.scores['f1']){
+      delete state.scores['f1'];
+      set(dbRef,state);
+    }
   }
   document.getElementById('sync-dot').classList.add('live');
   render();
-  if (adminCourt) { renderTeamEditor(); renderSchEditor(); renderConfirmZone(); }
-}, (error) => {
+  if(adminCourt){renderTeamEditor();renderSchEditor();renderConfirmZone();}
+},(error)=>{
   document.getElementById('sync-dot').classList.remove('live');
-  console.error('Firebase error:', error);
 });
-
-function persist() { set(dbRef, state); }
-
-// ── Helpers ──
-function teamName(code) { return (state.teams && state.teams[code]) || DEFAULT_TEAMS[code] || code; }
-function getGames(day) {
-  const base = day === 0 ? DEFAULT_FRI : DEFAULT_SAT;
-  return base.map(g => ({ ...g, t: (state.times && state.times[g.id]) || g.t }));
+ 
+function persist(){set(dbRef,state);}
+function teamName(code){return(state.teams&&state.teams[code])||DEFAULT_TEAMS[code]||code;}
+function getGames(day){
+  const base=day===0?DEFAULT_FRI:DEFAULT_SAT;
+  return base.map(g=>({...g,t:(state.times&&state.times[g.id])||g.t}));
 }
-
-// ── Standings ──
-function calcStandings() {
+ 
+function calcStandings(){
   const w={},l={},p={};
-  [...POOL_A,...POOL_B].forEach(t => { w[t]=0;l[t]=0;p[t]=0; });
-  [...getGames(0),...getGames(1)].forEach(g => {
-    const sc = state.scores && state.scores[g.id];
-    if (sc && sc.status==='done' && sc.sa!=null && sc.sb!=null) {
-      if (sc.sa>sc.sb){w[g.h]++;p[g.h]+=2;l[g.a]++;}
+  [...POOL_A,...POOL_B].forEach(t=>{w[t]=0;l[t]=0;p[t]=0;});
+  [...getGames(0),...getGames(1)].forEach(g=>{
+    const sc=state.scores&&state.scores[g.id];
+    if(sc&&sc.status==='done'&&sc.sa!=null&&sc.sb!=null){
+      if(sc.sa>sc.sb){w[g.h]++;p[g.h]+=2;l[g.a]++;}
       else if(sc.sb>sc.sa){w[g.a]++;p[g.a]+=2;l[g.h]++;}
     }
   });
-  const sort = arr => [...arr].sort((a,b)=>p[b]-p[a]||w[b]-w[a]);
-  return {A:sort(POOL_A),B:sort(POOL_B),w,l,p};
+  const sort=arr=>[...arr].sort((a,b)=>p[b]-p[a]||w[b]-w[a]);
+  return{A:sort(POOL_A),B:sort(POOL_B),w,l,p};
 }
-
-// ── Seed resolution ──
-function seedToTeam(sk) {
-  const pool=sk[0], rank=parseInt(sk.slice(1));
-  const code = state.seeds && state.seeds[pool] && state.seeds[pool][rank];
-  return code ? teamName(code) : null;
+ 
+function seedToTeam(sk){
+  const pool=sk[0],rank=parseInt(sk.slice(1));
+  const code=state.seeds&&state.seeds[pool]&&state.seeds[pool][rank];
+  return code?teamName(code):null;
 }
-function resolveTeam(g, side) {
+function resolveTeam(g,side){
   const sk=side==='h'?g.hSeed:g.aSeed;
   const winId=side==='h'?g.hWin:g.aWin;
   const loseId=side==='h'?g.hLose:g.aLose;
-  if (sk) return seedToTeam(sk);
-  const refId = winId||loseId;
-  if (!refId) return null;
-  const src = SUN.find(x=>x.id===refId);
-  if (!src) return null;
-  const sc = state.scores && state.scores[refId];
-  if (!sc||sc.status!=='done'||!(state.confirmed&&state.confirmed[refId])) return null;
-  const ht=resolveTeam(src,'h'), at=resolveTeam(src,'a');
-  if (winId) return sc.sa>sc.sb?ht:sc.sb>sc.sa?at:null;
-  if (loseId) return sc.sa>sc.sb?at:sc.sb>sc.sa?ht:null;
+  if(sk)return seedToTeam(sk);
+  const refId=winId||loseId;
+  if(!refId)return null;
+  const src=SUN.find(x=>x.id===refId);
+  if(!src)return null;
+  const sc=state.scores&&state.scores[refId];
+  if(!sc||sc.status!=='done'||!(state.confirmed&&state.confirmed[refId]))return null;
+  const ht=resolveTeam(src,'h'),at=resolveTeam(src,'a');
+  if(winId)return sc.sa>sc.sb?ht:sc.sb>sc.sa?at:null;
+  if(loseId)return sc.sa>sc.sb?at:sc.sb>sc.sa?ht:null;
   return null;
 }
-
-// ── Render scores ──
-function setDay(d) {
+ 
+function setDay(d){
   currentDay=d;
   document.querySelectorAll('.dtab').forEach((b,i)=>b.classList.toggle('active',i===d));
   renderGames();
 }
-window.setDay = setDay;
-
-function renderGames() {
-  const el = document.getElementById('games-list');
-  if (currentDay===2){el.innerHTML=renderSunday();return;}
-  const games = getGames(currentDay);
-  const groups = {};
+window.setDay=setDay;
+ 
+function gameCard(id,status,hn,an,sc,meta,isTbd){
+  const isDone=status==='done';
+  const hWins=isDone&&sc.sa>sc.sb;
+  const aWins=isDone&&sc.sb>sc.sa;
+  const clickable=isAdminMode&&adminCourt?'clickable':'';
+  return`<div class="gcard ${status} ${clickable}">
+    <div class="gmeta"><span>${meta}</span>${bdg(status)}</div>
+    <div class="mu">
+      <span class="tn${isTbd?' tbd':''}${hWins?' winner':''}">${hn}</span>
+      <div class="sd">
+        <span class="sn${hWins?' winner':''}">${sc&&sc.sa!=null?sc.sa:'—'}</span>
+        <span class="dash">:</span>
+        <span class="sn${aWins?' winner':''}">${sc&&sc.sb!=null?sc.sb:'—'}</span>
+      </div>
+      <span class="tn r${isTbd?' tbd':''}${aWins?' winner':''}">${an}</span>
+    </div>
+    ${isDone?`<div class="final-bar">✅ Game complete &nbsp;·&nbsp; ${hWins?hn+' wins':aWins?an+' wins':'Draw'}</div>`:''}
+  </div>`;
+}
+ 
+function renderGames(){
+  const el=document.getElementById('games-list');
+  if(currentDay===2){el.innerHTML=renderSunday();return;}
+  const games=getGames(currentDay);
+  const groups={};
   games.forEach(g=>{if(!groups[g.t])groups[g.t]=[];groups[g.t].push(g);});
-  el.innerHTML = Object.entries(groups).map(([time,gs])=>`
+  el.innerHTML=Object.entries(groups).map(([time,gs])=>`
     <div class="time-grp">
       <div class="time-hdr">Round ${gs[0].r} &nbsp;·&nbsp; ${time}</div>
       ${gs.map(g=>{
         const sc=(state.scores&&state.scores[g.id])||{};
         const st=sc.status||'upcoming';
-        return`<div class="gcard ${st}" onclick="clickGame('${g.id}')">
-          <div class="gmeta"><span>Court ${g.c} &nbsp;·&nbsp; Pool ${g.pool}</span>${bdg(st)}</div>
-          <div class="mu">
-            <span class="tn">${teamName(g.h)}</span>
-            <div class="sd"><span class="sn">${sc.sa!=null?sc.sa:'—'}</span><span class="dash">:</span><span class="sn">${sc.sb!=null?sc.sb:'—'}</span></div>
-            <span class="tn r">${teamName(g.a)}</span>
-          </div>
-        </div>`;
+        const card=gameCard(g.id,st,teamName(g.h),teamName(g.a),sc,`Court ${g.c} · Pool ${g.pool}`,false);
+        return isAdminMode&&adminCourt
+          ? card.replace('<div class="gcard','<div onclick="clickGame(\''+g.id+'\')" class="gcard')
+          : card;
       }).join('')}
     </div>`).join('');
 }
-function renderSunday() {
+ 
+function renderSunday(){
   const groups={};
   SUN.forEach(g=>{if(!groups[g.t])groups[g.t]=[];groups[g.t].push(g);});
   return Object.entries(groups).map(([time,gs])=>`
@@ -411,22 +444,18 @@ function renderSunday() {
         const sc=(state.scores&&state.scores[g.id])||{};
         const st=sc.status||'upcoming';
         const ht=resolveTeam(g,'h'),at=resolveTeam(g,'a');
-        return`<div class="gcard ${st}" onclick="clickSunGame('${g.id}')">
-          <div class="gmeta"><span>${g.label} &nbsp;·&nbsp; ${g.court}</span>${bdg(st)}</div>
-          <div class="mu">
-            <span class="tn${!ht?' tbd':''}">${ht||'TBD'}</span>
-            <div class="sd"><span class="sn">${sc.sa!=null?sc.sa:'—'}</span><span class="dash">:</span><span class="sn">${sc.sb!=null?sc.sb:'—'}</span></div>
-            <span class="tn r${!at?' tbd':''}">${at||'TBD'}</span>
-          </div>
-        </div>`;
+        const card=gameCard(g.id,st,ht||'TBD',at||'TBD',sc,`${g.label} · ${g.court}`,!ht||!at);
+        return isAdminMode&&adminCourt
+          ? card.replace('<div class="gcard','<div onclick="clickSunGame(\''+g.id+'\')" class="gcard')
+          : card;
       }).join('')}
     </div>`).join('');
 }
+ 
 function bdg(s){return`<span class="bdg ${s}">${{live:'🔴 Live',done:'✅ Final',upcoming:'Upcoming'}[s]||s}</span>`;}
-
-// ── Render standings ──
-function renderStandings() {
-  const {A,B,w,l,p}=calcStandings();
+ 
+function renderStandings(){
+  const{A,B,w,l,p}=calcStandings();
   function tbl(sorted,pn){
     return`<div class="pc"><h3>Pool ${pn}</h3>
       <table class="pt"><thead><tr><th>#</th><th>Team</th><th>Pts</th><th>W-L</th></tr></thead>
@@ -439,62 +468,61 @@ function renderStandings() {
   }
   document.getElementById('standings-body').innerHTML=tbl(A,'A')+tbl(B,'B');
 }
-
-// ── Tab switching ──
-function switchTab(name) {
+ 
+function switchTab(name){
   const names=['scores','standings','admin'];
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
-  names.forEach(n=>document.getElementById('tab-'+n).classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
+  const tabs=document.querySelectorAll('.tab');
+  tabs.forEach((t,i)=>t.classList.toggle('active',names[i]===name));
+  names.forEach(n=>{const el=document.getElementById('tab-'+n);if(el)el.classList.remove('active');});
+  const target=document.getElementById('tab-'+name);
+  if(target)target.classList.add('active');
   if(name==='standings')renderStandings();
   if(name==='admin'&&adminCourt){const d=parseInt(document.getElementById('adm-day').value);populateGames(d);renderTeamEditor();renderSchEditor();renderConfirmZone();}
 }
-window.switchTab = switchTab;
-
-// ── PIN ──
-function checkPin() {
-  const v=parseInt(document.getElementById('pin-input').value);
-  if(PINS[v]){
-    adminCourt=PINS[v];
+window.switchTab=switchTab;
+ 
+function checkPin(){
+  const v=document.getElementById('pin-input').value.trim();
+  if(PASSWORDS[v]){
+    adminCourt=PASSWORDS[v];
     document.getElementById('pin-status').textContent='✓ Unlocked';
     document.getElementById('pin-status').className='ps ok';
     document.getElementById('admin-panel').style.display='block';
     document.getElementById('adm-badge-row').innerHTML=`<span class="adm-badge c${adminCourt}">Admin ${adminCourt} — Court ${adminCourt} only</span>`;
     populateGames(0);renderTeamEditor();renderSchEditor();renderConfirmZone();
   }else{
-    document.getElementById('pin-status').textContent='✗ Wrong PIN';
+    document.getElementById('pin-status').textContent='✗ Wrong password';
     document.getElementById('pin-status').className='ps err';
   }
 }
-window.checkPin = checkPin;
-
-// ── Admin game selector ──
-function onDayChange() {
+window.checkPin=checkPin;
+ 
+function onDayChange(){
   const d=parseInt(document.getElementById('adm-day').value);
   populateGames(d);
   document.getElementById('seed-panel').style.display=d===2?'block':'none';
   if(d===2)renderSeedPanel();
   renderSchEditor();
 }
-window.onDayChange = onDayChange;
-
-function populateGames(d) {
+window.onDayChange=onDayChange;
+ 
+function populateGames(d){
   const sel=document.getElementById('adm-game');
   sel.innerHTML='';
   let games=d===0?getGames(0):d===1?getGames(1):SUN;
-  if(d<2) games=games.filter(g=>g.c===adminCourt);
+  if(d<2)games=games.filter(g=>g.c===adminCourt);
   games.forEach(g=>{
     const opt=document.createElement('option');
     opt.value=g.id;
-    if(d<2) opt.textContent=`R${g.r} · ${teamName(g.h)} vs ${teamName(g.a)} (${g.t})`;
+    if(d<2)opt.textContent=`R${g.r} · ${teamName(g.h)} vs ${teamName(g.a)} (${g.t})`;
     else opt.textContent=`${g.label} — ${g.t} · ${g.court}`;
     sel.appendChild(opt);
   });
-  if(!sel.options.length) sel.innerHTML='<option>(no games on your court)</option>';
+  if(!sel.options.length)sel.innerHTML='<option>(no games on your court)</option>';
   onGameChange();
 }
-
-function onGameChange() {
+ 
+function onGameChange(){
   const d=parseInt(document.getElementById('adm-day').value);
   const id=document.getElementById('adm-game').value;
   if(!id)return;
@@ -503,21 +531,15 @@ function onGameChange() {
   document.getElementById('adm-sb').value=sc.sb!=null?sc.sb:0;
   document.getElementById('adm-status').value=sc.status||'upcoming';
   let hn='Team 1',an='Team 2';
-  if(d<2){
-    const g=[...getGames(0),...getGames(1)].find(x=>x.id===id);
-    if(g){hn=teamName(g.h);an=teamName(g.a);}
-  }else{
-    const g=SUN.find(x=>x.id===id);
-    if(g){hn=resolveTeam(g,'h')||'TBD';an=resolveTeam(g,'a')||'TBD';}
-  }
+  if(d<2){const g=[...getGames(0),...getGames(1)].find(x=>x.id===id);if(g){hn=teamName(g.h);an=teamName(g.a);}}
+  else{const g=SUN.find(x=>x.id===id);if(g){hn=resolveTeam(g,'h')||'TBD';an=resolveTeam(g,'a')||'TBD';}}
   document.getElementById('lbl-a').textContent=hn;
   document.getElementById('lbl-b').textContent=an;
   document.getElementById('adm-preview').textContent=`${hn}  vs  ${an}`;
 }
-window.onGameChange = onGameChange;
-
-// ── Save / clear score ──
-function saveScore() {
+window.onGameChange=onGameChange;
+ 
+function saveScore(){
   const id=document.getElementById('adm-game').value;
   if(!id||id.startsWith('(no'))return;
   if(!state.scores)state.scores={};
@@ -528,9 +550,9 @@ function saveScore() {
   };
   persist();showToast('✅ Score saved & synced!');
 }
-window.saveScore = saveScore;
-
-function clearScore() {
+window.saveScore=saveScore;
+ 
+function clearScore(){
   const id=document.getElementById('adm-game').value;
   if(!id)return;
   if(state.scores)delete state.scores[id];
@@ -539,12 +561,11 @@ function clearScore() {
   document.getElementById('adm-sa').value=0;
   document.getElementById('adm-sb').value=0;
   document.getElementById('adm-status').value='upcoming';
-  showToast('Cleared.');
+  showToast('Score reset to —');
 }
-window.clearScore = clearScore;
-
-// ── Confirm advance ──
-function renderConfirmZone() {
+window.clearScore=clearScore;
+ 
+function renderConfirmZone(){
   const zone=document.getElementById('confirm-zone');
   if(!adminCourt){zone.innerHTML='';return;}
   zone.innerHTML=SUN.map(g=>{
@@ -559,24 +580,21 @@ function renderConfirmZone() {
     </div>`;
   }).join('');
 }
-
-function confirmAdv(id) {
+ 
+function confirmAdv(id){
   if(!state.confirmed)state.confirmed={};
   state.confirmed[id]=true;
   persist();renderConfirmZone();showToast('Advanced to next round!');
 }
-window.confirmAdv = confirmAdv;
-
-// ── Team editor ──
-function renderTeamEditor() {
+window.confirmAdv=confirmAdv;
+ 
+function renderTeamEditor(){
   document.getElementById('team-editor').innerHTML=[...POOL_A,...POOL_B].map(code=>`
-    <div class="team-row">
-      <label>${code}</label>
+    <div class="team-row"><label>${code}</label>
       <input type="text" id="tm-${code}" value="${teamName(code)}" placeholder="${DEFAULT_TEAMS[code]}">
     </div>`).join('');
 }
-
-function saveTeams() {
+function saveTeams(){
   if(!state.teams)state.teams={};
   [...POOL_A,...POOL_B].forEach(code=>{
     const v=document.getElementById(`tm-${code}`).value.trim();
@@ -586,24 +604,22 @@ function saveTeams() {
   populateGames(parseInt(document.getElementById('adm-day').value));
   showToast('Team names saved!');
 }
-window.saveTeams = saveTeams;
-
-// ── Schedule editor ──
-function renderSchEditor() {
+window.saveTeams=saveTeams;
+ 
+function renderSchEditor(){
   const d=parseInt(document.getElementById('sch-day').value);
   if(d===2){document.getElementById('sch-editor').innerHTML='<p style="font-size:11px;color:var(--text3)">Sunday times are fixed by bracket format.</p>';return;}
   const games=getGames(d);
   const rounds={};
   games.forEach(g=>{if(!rounds[g.r])rounds[g.r]=g;});
   document.getElementById('sch-editor').innerHTML=Object.values(rounds).map(g=>`
-    <div class="sch-row">
-      <label>Round ${g.r}</label>
+    <div class="sch-row"><label>Round ${g.r}</label>
       <input type="text" id="schtime-${d}-${g.r}" value="${(state.times&&state.times[g.id])||g.t}" placeholder="${g.t}">
     </div>`).join('');
 }
-window.renderSchEditor = renderSchEditor;
-
-function saveTimes() {
+window.renderSchEditor=renderSchEditor;
+ 
+function saveTimes(){
   const d=parseInt(document.getElementById('sch-day').value);
   if(d===2)return;
   if(!state.times)state.times={};
@@ -616,11 +632,10 @@ function saveTimes() {
   });
   persist();render();renderSchEditor();showToast('Times updated!');
 }
-window.saveTimes = saveTimes;
-
-// ── Seeding panel ──
-function renderSeedPanel() {
-  const {A,B}=calcStandings();
+window.saveTimes=saveTimes;
+ 
+function renderSeedPanel(){
+  const{A,B}=calcStandings();
   function pool(sorted,pk,elId){
     const codes=pk==='A'?POOL_A:POOL_B;
     document.getElementById(elId).innerHTML=[1,2,3,4,5,6,7,8].map(seed=>{
@@ -634,8 +649,7 @@ function renderSeedPanel() {
   }
   pool(A,'A','seed-a');pool(B,'B','seed-b');
 }
-
-function saveSeeds() {
+function saveSeeds(){
   if(!state.seeds)state.seeds={A:{},B:{}};
   [1,2,3,4,5,6,7,8].forEach(s=>{
     const va=document.getElementById(`seed-A-${s}`).value;
@@ -646,44 +660,40 @@ function saveSeeds() {
   state.confirmed={};
   persist();render();showToast('Seeds saved! Bracket updated.');
 }
-window.saveSeeds = saveSeeds;
-
-// ── Click shortcuts ──
-function clickGame(id) {
+window.saveSeeds=saveSeeds;
+ 
+function clickGame(id){
   const g=[...getGames(0),...getGames(1)].find(x=>x.id===id);
-  if(!g)return;
-  switchTab('admin');
-  if(!adminCourt){showToast('Enter admin PIN to edit.');return;}
+  if(!g||!adminCourt)return;
   if(g.c!==adminCourt){showToast(`You manage Court ${adminCourt} only.`);return;}
   document.getElementById('adm-day').value=getGames(0).find(x=>x.id===id)?0:1;
   onDayChange();
   document.getElementById('adm-game').value=id;
   onGameChange();
-}
-window.clickGame = clickGame;
-
-function clickSunGame(id) {
   switchTab('admin');
-  if(!adminCourt){showToast('Enter admin PIN to edit.');return;}
+}
+window.clickGame=clickGame;
+ 
+function clickSunGame(id){
+  if(!adminCourt)return;
   document.getElementById('adm-day').value=2;
   onDayChange();
   document.getElementById('adm-game').value=id;
   onGameChange();
+  switchTab('admin');
 }
-window.clickSunGame = clickSunGame;
-
-function render() {
+window.clickSunGame=clickSunGame;
+ 
+function render(){
   renderGames();
   if(document.getElementById('tab-standings').classList.contains('active'))renderStandings();
 }
-
-function showToast(msg) {
+function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2200);
 }
-window.showToast = showToast;
-
+window.showToast=showToast;
 </script>
 </body>
 </html>
