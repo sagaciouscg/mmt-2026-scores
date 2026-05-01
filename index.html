@@ -331,11 +331,7 @@ onValue(dbRef,(snapshot)=>{
     if(!state.confirmed)state.confirmed={};
     if(!state.teams)state.teams={};
     if(!state.times)state.times={};
-    // Clear test score for f1 if it exists
-    if(state.scores&&state.scores['f1']){
-      delete state.scores['f1'];
-      set(dbRef,state);
-    }
+ 
   }
   document.getElementById('sync-dot').classList.add('live');
   render();
@@ -697,4 +693,3 @@ window.showToast=showToast;
 </script>
 </body>
 </html>
- 
